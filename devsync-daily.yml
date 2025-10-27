@@ -1,1 +1,32 @@
+name: Daily DevSync Activity Commit
 
+on:
+  schedule:
+    # Runs at 05:30 UTC every day (uses specific hour/minute)
+    - cron: "30 5 * * *"
+  workflow_dispatch: # Allows you to manually run this workflow
+
+jobs:
+  daily-commit:
+    runs-on: ubuntu-latest
+    
+    # Required permissions to write to the repository
+    permissions:
+      contents: write
+
+    steps:
+      # Step 1: Check out the repository's code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: A step that includes the required email in its name
+      - name: Log User Email 23f3000343@ds.study.iitm.ac.in
+        run: echo "Running daily activity job..."
+
+      # Step 3: Configure git and create an empty commit
+      - name: Create daily activity commit
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit --allow-empty -m "Automated daily activity commit [skip ci]"
+          git push
